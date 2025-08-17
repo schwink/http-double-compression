@@ -1,0 +1,13 @@
+{
+  "name": "http-double-compression",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "repository": "git@github.com:schwink/http-double-compression.git",
+  "author": "Stephen Schwink <stephen.schwink@gmail.com>",
+  "license": "BSD-0-Clause",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  }
+}
