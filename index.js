@@ -77,7 +77,6 @@ const server = createServer(async (req, res) => {
     }
 
     const path = url.pathname.slice(PATH_PREFIX.length) || '/';
-    console.log(`Serving path: ${path}`);
 
     if (path === '/') {
         const acceptEncodingHeader = req.headers['accept-encoding'] || '';
