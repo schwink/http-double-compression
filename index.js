@@ -193,5 +193,5 @@ const server = createServer(async (req, res) => {
 
 const PORT = 8080;
 server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/${PATH_PREFIX}`);
+    console.log(`Server running at http://localhost:${PORT}${PATH_PREFIX}`);
 });
