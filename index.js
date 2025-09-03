@@ -54,12 +54,34 @@ const compressionSchemes = [
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 
+const PATH_PREFIX = process.env.PATH_PREFIX
+    ? '/' + process.env.PATH_PREFIX.replace(/^\/+|\/+$/g, '')
+    : '';
+
 const server = createServer(async (req, res) => {
     console.log(`Received request for ${req.url}`);
 
-    const acceptEncodingHeader = req.headers['accept-encoding'] || '';
+    const url = new URL(req.url, `http://${req.headers.host}`);
 
-    if (req.url === '/') {
+    if (url.pathname === '/healthcheck') {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end('{"status": "ok"}');
+        return;
+    }
+
+    if (!url.pathname.startsWith(PATH_PREFIX)) {
+        res.statusCode = 404;
+        res.end();
+        return;
+    }
+
+    const path = url.pathname.slice(PATH_PREFIX.length) || '/';
+    console.log(`Serving path: ${path}`);
+
+    if (path === '/') {
+        const acceptEncodingHeader = req.headers['accept-encoding'] || '';
+
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html');
         res.end(`<!DOCTYPE html>
@@ -115,12 +137,12 @@ const server = createServer(async (req, res) => {
             <th>body length</th>
         </tr>
         <tr>
-            <td><a href="/lipsum">Uncompressed</a></td>
+            <td><a href="${PATH_PREFIX}/lipsum">Uncompressed</a></td>
             <td class="number">${numberFormatter.format(uncompressedLength)}</td>
         </tr>
         ${compressionSchemes.map(({ used, length }) => `
     <tr>
-      <td><a href="/lipsum?compress=${used.join(',')}"><tt>${used.join(", ")}</tt></a></td>
+      <td><a href="${PATH_PREFIX}/lipsum?compress=${used.join(',')}"><tt>${used.join(", ")}</tt></a></td>
       <td class="number">${numberFormatter.format(length)}</td>
     </tr>
     `).join('')}
@@ -131,8 +153,7 @@ const server = createServer(async (req, res) => {
         return;
     }
 
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    if (url.pathname !== '/lipsum') {
+    if (path !== '/lipsum') {
         res.statusCode = 404;
         res.end();
         return;
@@ -172,5 +193,5 @@ const server = createServer(async (req, res) => {
 
 const PORT = 8080;
 server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
+    console.log(`Server running at http://localhost:${PORT}/${PATH_PREFIX}`);
 });
