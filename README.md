@@ -1,12 +1,24 @@
-
 # Double compression in HTTP Content-Encoding
 
-The [Content-Encoding header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Encoding) allows multiple encodings to be specified, like `Content-Encoding: br, gzip`.
+The HTTP [Content-Encoding header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Encoding) allows multiple compression schemes to be used in the same response.
 
-I never encountered this until recently. Does it really work? Answer: Partially
+> // Multiple, in the order in which they were applied  
+> Content-Encoding: deflate, gzip
 
-| Content-Encodign | Chrome | Safari                   |
-| :---             | :---   | :---                     |
-| `br`             | Yes    | Yes (HTTPS only)         |
-| `gz`             | Yes    | Yes                      |
-| `br, gz`         | Yes    | No (`Invalid character`) |
+I had never encountered this until recently. Does it really work?
+
+## [Try it yourself here](https://aws.vpc.schwink.net/http-double-compression/)
+
+| Content-Encoding | Chrome 139.0.7258.155 | Safari 18.6      | Firefox 142.0.1
+| :---             | :---                  | :---             | :---
+| `br`             | Yes                   | Yes (HTTPS only) | Yes
+| `gzip`           | Yes                   | Yes              | Yes
+| `br, gzip`       | Yes                   | No               | Yes
+
+Unsurprisingly, compressing an already-compressed stream does not tend to further reduce its size.
+
+| Content-Encoding | length
+| :---             | ---:
+| `br`             | 23,932
+| `gzip`           | 27,084
+| `br, gzip`       | 23,960
