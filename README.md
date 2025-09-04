@@ -19,6 +19,7 @@ Unsurprisingly, compressing an already-compressed stream does not tend to furthe
 
 | Content-Encoding | length
 | :---             | ---:
+| Uncompressed     | 100,320
 | `br`             | 23,932
 | `gzip`           | 27,084
 | `br, gzip`       | 23,960
