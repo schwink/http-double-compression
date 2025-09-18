@@ -7,7 +7,7 @@ The HTTP [Content-Encoding header](https://developer.mozilla.org/en-US/docs/Web/
 
 I had never encountered this until recently. Does it really work?
 
-[Try it yourself here](https://aws.vpc.schwink.net/http-double-compression/)
+[Try it yourself here](https://schwink.net/http-double-compression/)
 
 | Content-Encoding | Chrome 139.0.7258.155 | Safari 18.6 | Firefox 142.0.1
 | :---             | :---                  | :---        | :---
